@@ -8,7 +8,8 @@ module.exports = {
             await client.save();
             return res.status(200).json({
                 success: true,
-                message: 'Client created successfully.'
+                message: 'Client created successfully.',
+                client
             });
         } catch (error) {
             console.log({ error });
