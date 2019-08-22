@@ -13,6 +13,8 @@ const app = express();
 /* settings */
 app.set('port', process.env.PORT || 5000);
 
+/* static files */
+app.use(express.static('uploads'));
 
 /* middlewares */
 app.use(express.json());
@@ -50,9 +52,6 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
-
-/* static files */
-app.use(express.static('uploads'));
 
 /* routing */
 app.use('/', routes);
