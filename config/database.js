@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto').randomBytes(256).toString('hex');
 
-mongoose.connect('mongodb://localhost:27017/reactapi', {
+mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false
@@ -8,4 +9,4 @@ mongoose.connect('mongodb://localhost:27017/reactapi', {
     .then(db => console.log('DB is connected'))
     .catch((err) => console.error(err));
 
-/* import models */
+process.env.SECRET_KEY = crypto;

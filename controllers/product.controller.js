@@ -56,7 +56,7 @@ module.exports = {
             if (!product) {
                 return res.status(404).json({
                     success: false,
-                    messagProduct: 'Product does not exist!'
+                    message: 'Product does not exist!'
                 });
             }
             return res.status(200).json({
@@ -82,13 +82,14 @@ module.exports = {
             const product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true });
             if (!product) {
                 if (req.file) await fs.unlink(path.join(__dirname, `/../uploads/${req.file.filename}`));
+                
                 return res.status(404).json({
                     success: false,
-                    messagProduct: 'Product does not exist!'
+                    message: 'Product does not exist!'
                 });
             }
             if (req.file && product) {
-                await fs.unlink(path.join(__dirname, `/../uploads/${product.image}`));
+                if(product.image) await fs.unlink(path.join(__dirname, `/../uploads/${product.image}`));
                 product.image = req.file.filename
                 await product.save();
             }
@@ -116,7 +117,7 @@ module.exports = {
             if (!product) {
                 return res.status(404).json({
                     success: false,
-                    messagProduct: 'Product does not exist!'
+                    message: 'Product does not exist!'
                 });
             } else {
                 await fs.unlink(path.join(__dirname, `/../uploads/${product.image}`));
@@ -136,6 +137,27 @@ module.exports = {
                 }
             }
             next();
+        }
+    },
+
+    search_product_post: async (req, res, next) => {
+        try {
+            const { query } = req.params;
+            const products = await Product.find({ name: new RegExp(query, 'i') });
+            console.log({products});
+            if (products.length === 0) {
+                console.log('no hay productos con esa busqueda: ', query);
+                return res.json({
+                    success: false,
+                    message: 'Products do not exist!'
+                });
+            }
+            return res.status(200).json({
+                success: true,
+                products
+            });
+        } catch (error) {
+            console.log({error});
         }
     },
 }

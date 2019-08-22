@@ -5,6 +5,8 @@ module.exports = {
     create_order_post: async (req, res, next) => {
         try {
             const order = new Order(req.body);
+            console.log({order});
+            console.log(order.products);
             await order.save();
             return res.status(200).json({
                 success: true,

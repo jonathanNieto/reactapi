@@ -25,14 +25,15 @@ module.exports = {
                 if (error.errors.hasOwnProperty('lastname')) {
                     message += error.errors.lastname.message + ';\n';
                 }
-                res.status(400).json({
+                return res.status(400).json({
                     success: false,
                     message
                 });
             }
             if (error.hasOwnProperty('code')) {
                 if (error.code === 11000) {
-                    res.status(400).json({
+                    console.log('estoy enviando esto');
+                    return res.status(400).json({
                         success: false,
                         message: 'Email already exists: ' + error.errmsg
                     });
@@ -102,6 +103,32 @@ module.exports = {
                     res.status(404).json({
                         success: false,
                         message: 'Invalid ObjectId!'
+                    });
+                }
+            }
+            if (error.hasOwnProperty('errors')) {
+                let message = '';
+                if (error.errors.hasOwnProperty('email')) {
+                    message += error.errors.email.message + ';\n';
+                }
+                if (error.errors.hasOwnProperty('name')) {
+                    message += error.errors.name.message + ';\n';
+
+                }
+                if (error.errors.hasOwnProperty('lastname')) {
+                    message += error.errors.lastname.message + ';\n';
+                }
+                return res.status(400).json({
+                    success: false,
+                    message
+                });
+            }
+            if (error.hasOwnProperty('code')) {
+                if (error.code === 11000) {
+                    console.log('estoy enviando esto');
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Email already exists'
                     });
                 }
             }
